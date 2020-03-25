@@ -27,5 +27,9 @@
 
     <!-- 和本地bean一样实现服务 -->
     <bean id="userService" class="com.juquren.service.impl.userMapperServiceImpl" />
+    <bean id="dubboProxy" class="com.juquren.trace.proxy.MyDubboServiceAutoProxyCreator"/>
 
+    <bean id="serviceDigestLogInterceptor"
+          class="com.juquren.trace.interceptor.ServiceDigestLogInterceptor">
+    </bean>
 </beans>
