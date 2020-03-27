@@ -3,20 +3,24 @@ package com.juquren.trace.proxy;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.framework.ProxyProcessorSupport;
 import org.springframework.aop.framework.adapter.AdvisorAdapterRegistry;
 import org.springframework.aop.framework.adapter.GlobalAdvisorAdapterRegistry;
+import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.aop.target.SingletonTargetSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class MyDubboServiceAutoProxyCreator implements BeanPostProcessor, BeanFactoryAware {
+public class MyDubboServiceAutoProxyCreator extends ProxyProcessorSupport implements BeanPostProcessor, BeanFactoryAware {
     /** spring的bean工厂 */
     protected BeanFactory          beanFactory;
 
@@ -95,8 +99,8 @@ public class MyDubboServiceAutoProxyCreator implements BeanPostProcessor, BeanFa
     }
 
     private Advisor[] resolveInterceptorNames(String[] interceptorNames) {
-        ConfigurableBeanFactory cbf = (this.beanFactory instanceof ConfigurableBeanFactory ? (ConfigurableBeanFactory) this.beanFactory
-                : null);
+        ConfigurableBeanFactory cbf = (this.beanFactory instanceof ConfigurableBeanFactory ?
+                (ConfigurableBeanFactory) this.beanFactory : null);
         List<Advisor> advisors = new ArrayList<Advisor>();
         for (String beanName : interceptorNames) {
             if (cbf == null || !cbf.isCurrentlyInCreation(beanName)) {
@@ -109,13 +113,20 @@ public class MyDubboServiceAutoProxyCreator implements BeanPostProcessor, BeanFa
 
     private Object createProxy(Class<?> beanClass, String beanName,
                                String[] specificInterceptorNames, TargetSource targetSource){
-        ProxyFactory proxyFactory = new ProxyFactory();
 
-        Advisor[] specificInterceptors = resolveInterceptorNames(specificInterceptorNames);
-        Advisor[] advisors = new Advisor[specificInterceptors.length];
-        for (int i = 0; i < specificInterceptors.length; i++) {
-            advisors[i] = this.advisorAdapterRegistry.wrap(specificInterceptors[i]);
+        ProxyFactory proxyFactory = new ProxyFactory();
+        proxyFactory.copyFrom(this);
+
+        if (!proxyFactory.isProxyTargetClass()) {
+            if (shouldProxyTargetClass(beanClass, beanName)) {
+                proxyFactory.setProxyTargetClass(true);
+            }
+            else {
+                evaluateProxyInterfaces(beanClass, proxyFactory);
+            }
         }
+
+        Advisor[] advisors = buildAdvisors(beanName, specificInterceptorNames);
         for (Advisor advisor : advisors) {
             proxyFactory.addAdvisor(advisor);
         }
@@ -123,7 +134,23 @@ public class MyDubboServiceAutoProxyCreator implements BeanPostProcessor, BeanFa
         proxyFactory.setTargetSource(targetSource);
         proxyFactory.setFrozen(false);
 
-        return proxyFactory.getProxy();
+        return proxyFactory.getProxy(getProxyClassLoader());
 
+    }
+
+    protected boolean shouldProxyTargetClass(Class<?> beanClass, String beanName) {
+        return (this.beanFactory instanceof ConfigurableListableBeanFactory &&
+                AutoProxyUtils.shouldProxyTargetClass((ConfigurableListableBeanFactory) this.beanFactory, beanName));
+    }
+
+    protected Advisor[] buildAdvisors(String beanName, String[] specificInterceptors) {
+        Advisor[] commonInterceptors = resolveInterceptorNames(specificInterceptors);
+
+        List<Advisor> allInterceptors = new ArrayList<>(Arrays.asList(commonInterceptors));
+        Advisor[] advisors = new Advisor[allInterceptors.size()];
+        for (int i = 0; i < allInterceptors.size(); i++) {
+            advisors[i] = this.advisorAdapterRegistry.wrap(allInterceptors.get(i));
+        }
+        return advisors;
     }
 }

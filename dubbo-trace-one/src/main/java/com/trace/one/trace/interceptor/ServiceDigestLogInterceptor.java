@@ -18,6 +18,8 @@ public class ServiceDigestLogInterceptor extends TraceLogContext implements Meth
                 String s = UUID.randomUUID().toString();
                 CONTEXT_HOLDER.set(s);
                 RpcContext.getContext().setAttachment("traceId", s);
+            } else {
+                RpcContext.getContext().setAttachment("traceId", CONTEXT_HOLDER.get());
             }
         } else {
             CONTEXT_HOLDER.set(traceId);
