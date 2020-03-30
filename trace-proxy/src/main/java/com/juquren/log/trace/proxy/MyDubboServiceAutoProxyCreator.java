@@ -1,4 +1,4 @@
-package com.trace.one.trace.proxy;
+package com.juquren.log.trace.proxy;
 
 import org.springframework.aop.Advisor;
 import org.springframework.aop.TargetSource;

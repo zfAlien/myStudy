@@ -74,5 +74,5 @@
         <!-- 配置sqlSessionFactoryBeanName -->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
-    <import resource="classpath:dubbo/*.xml"/>
+    <import resource="classpath:spring/*.xml"/>
 </beans>

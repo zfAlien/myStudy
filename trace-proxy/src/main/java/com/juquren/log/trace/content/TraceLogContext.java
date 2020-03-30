@@ -1,17 +1,14 @@
-package com.trace.one.trace.interceptor;
+package com.juquren.log.trace.content;
 
 import com.alibaba.dubbo.rpc.RpcContext;
-import com.trace.one.trace.content.TraceLogContext;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
-public class ServiceDigestLogInterceptor extends TraceLogContext implements MethodInterceptor {
+public class TraceLogContext {
+    protected static final ThreadLocal<String> CONTEXT_HOLDER              = new ThreadLocal<>();
 
-    @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    protected void dubboTraceId(){
         String traceId = RpcContext.getContext().getAttachment("traceId");
         if(StringUtils.isEmpty(traceId)) {
             if(StringUtils.isEmpty(CONTEXT_HOLDER.get())) {
@@ -24,9 +21,12 @@ public class ServiceDigestLogInterceptor extends TraceLogContext implements Meth
         } else {
             CONTEXT_HOLDER.set(traceId);
         }
+    }
 
-        System.out.println("我tm的看看怎么调用的"+CONTEXT_HOLDER.get());
-        Object result = invocation.proceed();
-        return result;
+    protected void httpTraceId(){
+        if(StringUtils.isEmpty(CONTEXT_HOLDER.get())) {
+            String s = UUID.randomUUID().toString();
+            CONTEXT_HOLDER.set(s);
+        }
     }
 }

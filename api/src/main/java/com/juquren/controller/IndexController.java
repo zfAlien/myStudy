@@ -44,7 +44,6 @@ public class IndexController {
         } catch (AuthenticationException e) {
             return "账户验证失败";
         }
-        System.out.println("我想去创建");
         User testFactoryBean = (User)wac.getBean("testFactoryBean");
         System.out.println(testFactoryBean.getId());
         User user = userMapperService.selectByPrimaryKey(1);

@@ -11,6 +11,9 @@
         <module>dubbo-trace-one</module>
         <module>api</module>
         <module>common-sdk</module>
+        <module>trace-proxy</module>
+        <module>trace-filter</module>
+        <module>common</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
@@ -24,6 +27,15 @@
         <slf4j.version>1.7.21</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
     </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.30</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
 
         <!-- spring mvc -->

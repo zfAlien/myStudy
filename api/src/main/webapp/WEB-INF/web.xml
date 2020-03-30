@@ -68,7 +68,7 @@
 
     <filter>
         <filter-name>requestDigestLogFilter</filter-name>
-        <filter-class>com.juquren.trace.filter.RequestDigestLogFilter</filter-class>
+        <filter-class>com.juquren.log.trace.filter.RequestDigestLogFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>requestDigestLogFilter</filter-name>

@@ -1,0 +1,2 @@
+ProviderTranceFilter=com.juquren.dubbo.filter.ProviderTraceFilter
+ConsumeTraceFilter=com.juquren.dubbo.filter.ConsumerTraceFilter
