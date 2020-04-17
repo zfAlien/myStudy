@@ -12,6 +12,6 @@ public class JavaSPITest {
         ServiceLoader<Robot> serviceLoader = ServiceLoader.load(Robot.class);
         System.out.println("Java SPI");
         serviceLoader.forEach(Robot::sayHello);
-        System.out.println(String.format("%s哈哈%<s,嗯%s","11","22"));
+        System.out.println(String.format("%s哈哈%<s,嗯%s", "11", "22"));
     }
 }
