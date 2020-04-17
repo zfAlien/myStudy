@@ -1,16 +1,20 @@
-import com.juquren.listener.CuratorWatcherImpl;
+package com.juquren.listener;
+
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.junit.Test;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
- * 测试zookeeper连接,并创建节点
+ * 主要是用于监听zookeeper中节点的变化，配合dubbo demo provide连接到115.28.82.158
  */
-public class ZookeeperRegistryTest {
-    @Test
-    public void test() throws Exception {
+@Component
+public class ZookeeperListener {
+    @PostConstruct
+    private void init() throws Exception {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client =
                 CuratorFrameworkFactory.builder()
@@ -20,14 +24,6 @@ public class ZookeeperRegistryTest {
                         .retryPolicy(retryPolicy)
                         .build();
         client.start();
-        //判断节点是否存在
-        if (client.checkExists().forPath("/path") == null) {
-            client.create().forPath("/path");
-        }
-        if (client.checkExists().forPath("/path/ttt") == null) {
-            client.create().forPath("/path/ttt");
-        }
-
         client.getChildren().usingWatcher(new CuratorWatcherImpl(client)).forPath("/dubbo/com.alibaba.dubbo.demo.DemoService/providers");
     }
 }

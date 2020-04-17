@@ -3,6 +3,9 @@ import org.junit.Test;
 
 import java.util.ServiceLoader;
 
+/**
+ * 简单的测试java 的spi
+ */
 public class JavaSPITest {
     @Test
     public void sayHello() throws Exception {
