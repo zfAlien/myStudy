@@ -21,7 +21,7 @@ public class userMapperServiceImpl implements userMapperService {
     @Override
     public User selectByPrimaryKey(int id) {
         String name = contentFacade.getName();
-        contentFacade.getNum();
+        Integer num = contentFacade.getNum();
         System.out.println(name);
         return userMapper.selectByPrimaryKey(id);
     }

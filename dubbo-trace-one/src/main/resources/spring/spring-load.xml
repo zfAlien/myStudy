@@ -6,5 +6,5 @@
 
     <import resource="classpath:dubbo/*.xml"/>
     <!-- 使用proxy来做dubbo traceId传递引用这个模块 -->
-<!--    <import resource="classpath:log-trace-proxy.xml"/>-->
+    <import resource="classpath:log-trace-proxy.xml"/>
 </beans>

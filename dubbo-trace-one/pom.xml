@@ -19,17 +19,17 @@
         </dependency>
 
         <!-- 使用proxy来做dubbo traceId传递引用这个模块 -->
-<!--        <dependency>-->
-<!--            <groupId>juquren</groupId>-->
-<!--            <artifactId>trace-proxy</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--        </dependency>-->
-
-        <!-- 使用dubbo filter来做dubbo traceId传递引用这个模块 -->
         <dependency>
             <groupId>juquren</groupId>
-            <artifactId>trace-filter</artifactId>
+            <artifactId>trace-proxy</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- 使用dubbo filter来做dubbo traceId传递引用这个模块 -->
+        <!--<dependency>-->
+            <!--<groupId>juquren</groupId>-->
+            <!--<artifactId>trace-filter</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
     </dependencies>
 </project>

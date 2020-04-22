@@ -15,6 +15,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +75,14 @@ public class MyDubboServiceAutoProxyCreator extends ProxyProcessorSupport implem
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+//            try {
+//                Object ref = getRefMethod.invoke(bean);
+//                Object proxy = new JDKDynamicProxy(ref).getProxy();
+//                setRefMethod.invoke(bean, proxy);
+//            } catch (Exception e) {
+//                System.out.println("搞砸了");
+//            }
         }
         return bean;
     }
@@ -93,6 +102,7 @@ public class MyDubboServiceAutoProxyCreator extends ProxyProcessorSupport implem
                     && !bean.getClass().getName().equals(DUBBO_REFERENCE_BEAN)) {
                 bean = createProxy(bean.getClass(), beanName, this.salInterceptorNames,
                         new SingletonTargetSource(bean));
+//                bean = new JDKDynamicProxy(bean).getProxy();
             }
         }
         return bean;
