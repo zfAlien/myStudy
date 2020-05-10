@@ -30,6 +30,13 @@
             <artifactId>trace-filter</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- 测试netty模块 -->
+        <dependency>
+            <groupId>juquren</groupId>
+            <artifactId>netty</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

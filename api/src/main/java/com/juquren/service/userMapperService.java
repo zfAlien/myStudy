@@ -9,4 +9,5 @@ public interface userMapperService {
 
     User selectByPrimaryKey(int id);
 
+    void testDubbo();
 }

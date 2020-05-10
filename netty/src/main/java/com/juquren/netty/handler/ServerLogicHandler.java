@@ -29,12 +29,12 @@ public class ServerLogicHandler extends SimpleChannelHandler {
     @Override
     public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception{
         System.out.println("server断开连接了");
-        super.channelDisconnected(ctx,e);
+//        super.channelDisconnected(ctx,e);
     }
 
     @Override
     public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
         System.out.println("server关闭了");
-        super.channelClosed(ctx,e);
+//        super.channelClosed(ctx,e);
     }
 }

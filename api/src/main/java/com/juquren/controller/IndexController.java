@@ -3,6 +3,7 @@ package com.juquren.controller;
 import com.alibaba.fastjson.JSON;
 import com.juquren.entity.User;
 import com.juquren.invocation.JDKDynamicProxy;
+import com.juquren.netty.client.Client;
 import com.juquren.service.impl.userMapperServiceImpl;
 import com.juquren.service.userMapperService;
 import com.juquren.task.ScheduledTask;
@@ -62,6 +63,14 @@ public class IndexController {
         return JSON.toJSONString(test);
     }
 
+    @GetMapping("/test/dubbo")
+    @RequiresPermissions("index:test")
+    @ResponseBody
+    public List testDubbo(HttpServletResponse res) {
+        userMapperService.testDubbo();
+        return new ArrayList();
+    }
+
     @GetMapping("/test")
     @RequiresPermissions("index:test")
     @ResponseBody
@@ -99,5 +108,22 @@ public class IndexController {
         // jdk动态代理测试
         userMapperService subject = new JDKDynamicProxy(new userMapperServiceImpl()).getProxy();
         subject.selectByPrimaryKey(1);
+    }
+
+    @GetMapping("/test/netty")
+    @ResponseBody
+    public void testNetty(HttpServletResponse res) throws IOException, InterruptedException {
+        new Thread(()->{
+            Client netty = new Client();
+            netty.doConnect();
+            while (true) {
+                netty.getChannel().write("123123");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

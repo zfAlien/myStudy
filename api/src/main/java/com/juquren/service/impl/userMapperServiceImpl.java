@@ -20,9 +20,13 @@ public class userMapperServiceImpl implements userMapperService {
 
     @Override
     public User selectByPrimaryKey(int id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void testDubbo() {
         String name = contentFacade.getName();
         Integer num = contentFacade.getNum();
         System.out.println(name);
-        return userMapper.selectByPrimaryKey(id);
     }
 }
